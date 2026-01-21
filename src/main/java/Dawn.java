@@ -1,17 +1,25 @@
+import java.util.Scanner;
+
 public class Dawn {
     public static void main(String[] args) {
-        String logo = " ____                        \n"
-            + "|  _ \\   __ _ __      __ _ __ \n"
-            + "| | | | / _` |\\ \\ /\\ / /| '_ \\ \n"
-            + "| |_| || (_| | \\ V  V / | | | |\n"
-            + "|____/  \\__,_|  \\_/\\_/  |_| |_|\n";
-        System.out.println("Hello from\n" + logo);
+        Scanner s = new Scanner(System.in);
 
         System.out.println("""
-        Hello! I'm Dawn
+        Hello! I'm Dawn!
         What can I do for you?
-
-        Bye. Hope to see you again soon!
         """);
+
+        boolean isBye = false;
+        while (!isBye) {
+            String text = s.nextLine();
+            if (text.equals("bye")) {
+                System.out.println("\tBye. Hope to see you again soon!");
+                isBye = true;
+            } else {
+                System.out.println("\tEcho: " + text);
+            }
+        }        
+
+        s.close();
     }
 }
