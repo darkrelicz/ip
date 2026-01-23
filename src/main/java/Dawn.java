@@ -96,6 +96,23 @@ public class Dawn {
                 db.add(event);
                 printTask(event, db);
                 break;
+
+            case "delete":
+                if (db.isEmpty()) {
+                    throw new InvalidCommandException("  List is empty!");
+                }
+                if (parts.length < 2) {
+                    throw new InvalidUsageException("delete <task number>");
+                }
+                int taskID = Integer.parseInt(parts[1])-1;
+                if (taskID < 0 || taskID >= db.size()) {
+                    throw new InvalidCommandException("  Invalid task number");
+                }
+                Task target = db.remove(taskID);
+                System.out.println("  Noted. I've deleted the following item:");
+                System.out.println("  "+target.toString());
+                System.out.println(String.format("  Now you have %d tasks in the list.", db.size()));
+                break;
                 
             default:
                 throw new InvalidCommandException("  Unknown command. Please try again!");
