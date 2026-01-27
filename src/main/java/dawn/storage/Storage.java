@@ -20,10 +20,6 @@ public class Storage {
         }
     }
 
-    private boolean validateTodo(String body) {
-        return true;
-    }
-
     public static ArrayList<Task> readTasks() throws IOException {
         createFileIfNotExist();
         ArrayList<Task> localDb = new ArrayList<>();

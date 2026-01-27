@@ -9,6 +9,7 @@ import dawn.tasks.Event;
 import dawn.tasks.Todo;
 
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -21,7 +22,7 @@ public class Dawn {
     }
 
     private static void handleCommand(String input, ArrayList<Task> db) 
-            throws InvalidUsageException, InvalidCommandException, ExitException, IOException {
+            throws InvalidUsageException, InvalidCommandException, ExitException, IOException, DateTimeParseException {
         String[] parts = input.split(" ");
         String cmd = parts[0].toLowerCase();
         String body = String.join(" ", Arrays.copyOfRange(parts, 1, parts.length));
@@ -148,6 +149,8 @@ public class Dawn {
                     handleCommand(input, db);
                 } catch (ExitException e) {
                     break;
+                } catch (DateTimeParseException e) {
+                    System.out.println("  Please enter dates in this format: dd-MM-yyyy HH:mm");
                 } catch (RuntimeException e) {
                     System.out.println(e.toString());
                 } catch (IOException e) {
