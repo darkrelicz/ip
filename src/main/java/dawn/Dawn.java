@@ -1,3 +1,14 @@
+package dawn;
+import dawn.exceptions.ExitException;
+import dawn.exceptions.InvalidCommandException;
+import dawn.exceptions.InvalidUsageException;
+import dawn.storage.Storage;
+import dawn.tasks.Task;
+import dawn.tasks.Deadline;
+import dawn.tasks.Event;
+import dawn.tasks.Todo;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -10,13 +21,14 @@ public class Dawn {
     }
 
     private static void handleCommand(String input, ArrayList<Task> db) 
-            throws InvalidUsageException, InvalidCommandException, ExitException {
+            throws InvalidUsageException, InvalidCommandException, ExitException, IOException {
         String[] parts = input.split(" ");
         String cmd = parts[0].toLowerCase();
         String body = String.join(" ", Arrays.copyOfRange(parts, 1, parts.length));
         switch (cmd) {
             case "exit":
             case "bye":
+                Storage.updateStorage(db);
                 System.out.println("  Bye. Hope to see you again soon!"); 
                 throw new ExitException();
 
@@ -120,15 +132,16 @@ public class Dawn {
     }
 
     public static void main(String[] args) {
-        ArrayList<Task> db = new ArrayList<>();
         Scanner s = new Scanner(System.in);
 
-        System.out.println("""
-        Hello! I'm Dawn!
-        What can I do for you?
-        """);
+        try { 
+            ArrayList<Task> db = Storage.readTasks();
+            
+            System.out.println("""
+            Hello! I'm Dawn!
+            What can I do for you?
+            """);
 
-        try {        
             while (true) {
                 try {
                     String input = s.nextLine().trim();
@@ -137,10 +150,14 @@ public class Dawn {
                     break;
                 } catch (RuntimeException e) {
                     System.out.println(e.toString());
+                } catch (IOException e) {
+                    System.out.println("  IO issues");
                 } catch (Exception e) {
                     System.out.println("  Something went wrong! Please try again.");
                 }            
             }       
+        } catch (IOException e) {
+            System.out.println("  File not found!");
         } finally {
             s.close();
         }

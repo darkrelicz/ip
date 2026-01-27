@@ -1,3 +1,4 @@
+package dawn.tasks;
 public class Event extends Task {
     protected String startDate;
     protected String endDate;
@@ -6,6 +7,17 @@ public class Event extends Task {
         super(description);
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public Event(boolean isDone, String description, String startDate, String endDate){
+        super(isDone, description);
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    @Override
+    public String toCsv() {
+        return "E," + super.toCsv() + String.format(",%s,%s", startDate, endDate);
     }
 
     @Override
