@@ -8,9 +8,6 @@ import dawn.tasks.Event;
 import dawn.tasks.Task;
 import dawn.tasks.Todo;
 
-
-
-
 public class Storage {
     public static final String FILE_PATH = "data/data.csv";
     public static final String DELIMITER = ",";
