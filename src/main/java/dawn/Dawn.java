@@ -14,10 +14,15 @@ import java.io.IOException;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class Dawn {
-    private static void handleCommand(String input, ArrayList<Task> db) 
+    private UserInterface ui;
+
+    public Dawn() {
+        this.ui = new UserInterface();
+    }
+
+    private void handleCommand(String input, ArrayList<Task> db) 
             throws InvalidUsageException, InvalidCommandException, ExitException, IOException, DateTimeParseException {
         String[] parts = input.split(" ");
         String cmd = parts[0].toLowerCase();
@@ -26,11 +31,11 @@ public class Dawn {
             case "exit":
             case "bye":
                 Storage.updateStorage(db);
-                UserInterface.printExit();
+                this.ui.printExit();
                 throw new ExitException();
 
             case "list":
-                UserInterface.printList(db);
+                this.ui.printList(db);
                 break;
 
             case "mark":  
@@ -46,7 +51,7 @@ public class Dawn {
                     throw new InvalidCommandException("  Invalid task number");
                 }
                 db.get(taskNum).markDone();
-                UserInterface.printMarkDone(db, taskNum);
+                this.ui.printMarkDone(db, taskNum);
                 break;
 
             case "unmark": 
@@ -61,7 +66,7 @@ public class Dawn {
                     throw new InvalidCommandException("  Invalid task number");
                 }
                 db.get(taskIndex).unmarkDone();
-                UserInterface.printMarkUndone(db, taskIndex);
+                this.ui.printMarkUndone(db, taskIndex);
                 break;
 
             case "todo":
@@ -70,7 +75,7 @@ public class Dawn {
                 }
                 Task todo = new Todo(body);
                 db.add(todo);
-                UserInterface.printTask(todo, db);
+                this.ui.printTask(todo, db);
                 break;
 
             case "deadline":
@@ -80,7 +85,7 @@ public class Dawn {
                 }
                 Task deadline = new Deadline(deadlineParts[0], deadlineParts[1]); 
                 db.add(deadline);
-                UserInterface.printTask(deadline, db); 
+                this.ui.printTask(deadline, db); 
                 break;
 
             case "event":
@@ -97,7 +102,7 @@ public class Dawn {
                 String end = dates[1];
                 Task event = new Event(eventDesc, start, end); 
                 db.add(event);
-                UserInterface.printTask(event, db);
+                this.ui.printTask(event, db);
                 break;
 
             case "delete":
@@ -112,7 +117,7 @@ public class Dawn {
                     throw new InvalidCommandException("  Invalid task number");
                 }
                 Task target = db.remove(taskID);
-                UserInterface.printTaskDeleted(db, target);
+                this.ui.printTaskDeleted(db, target);
                 break;
                 
             default:
@@ -121,16 +126,16 @@ public class Dawn {
     }
 
     public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
+        Dawn dawnBot = new Dawn();
 
         try { 
             ArrayList<Task> db = Storage.readTasks();
-            UserInterface.printWelcome();
+            dawnBot.ui.printWelcome();
 
             while (true) {
                 try {
-                    String input = s.nextLine().trim();
-                    handleCommand(input, db);
+                    String input = dawnBot.ui.readCommand();
+                    dawnBot.handleCommand(input, db);
                 } catch (ExitException e) {
                     break;
                 } catch (DateTimeParseException e) {
@@ -144,9 +149,7 @@ public class Dawn {
                 }            
             }       
         } catch (IOException e) {
-            System.out.println("  File not found!");
-        } finally {
-            s.close();
-        }
+            System.out.println("  File not found??!");
+        } 
     }
 }
