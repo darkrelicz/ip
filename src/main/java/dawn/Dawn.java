@@ -1,4 +1,5 @@
 package dawn;
+
 import dawn.exceptions.ExitException;
 import dawn.exceptions.InvalidCommandException;
 import dawn.exceptions.InvalidUsageException;
@@ -7,6 +8,7 @@ import dawn.tasks.Task;
 import dawn.tasks.Deadline;
 import dawn.tasks.Event;
 import dawn.tasks.Todo;
+import dawn.ui.UserInterface;
 
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
@@ -15,12 +17,6 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Dawn {
-    private static void printTask(Task newTask, ArrayList<Task> db) {
-        System.out.println("  Got it. I've added this task:");
-        System.out.println("  "+newTask.toString());    
-        System.out.println(String.format("  Now you have %d tasks in the list.", db.size()));
-    }
-
     private static void handleCommand(String input, ArrayList<Task> db) 
             throws InvalidUsageException, InvalidCommandException, ExitException, IOException, DateTimeParseException {
         String[] parts = input.split(" ");
@@ -30,15 +26,11 @@ public class Dawn {
             case "exit":
             case "bye":
                 Storage.updateStorage(db);
-                System.out.println("  Bye. Hope to see you again soon!"); 
+                UserInterface.printExit();
                 throw new ExitException();
 
             case "list":
-                System.out.println("  Here are the tasks in your list:");
-                for (int i = 0; i < db.size(); i++) {
-                    String res = String.format("  %d. %s", i+1, db.get(i).toString());
-                    System.out.println(res);
-                }     
+                UserInterface.printList(db);
                 break;
 
             case "mark":  
@@ -54,8 +46,7 @@ public class Dawn {
                     throw new InvalidCommandException("  Invalid task number");
                 }
                 db.get(taskNum).markDone();
-                System.out.println("  Nice! I've marked this task as done:");
-                System.out.println("  "+db.get(taskNum).toString());
+                UserInterface.printMarkDone(db, taskNum);
                 break;
 
             case "unmark": 
@@ -70,8 +61,7 @@ public class Dawn {
                     throw new InvalidCommandException("  Invalid task number");
                 }
                 db.get(taskIndex).unmarkDone();
-                System.out.println("  OK, I've marked this task as not done yet:");
-                System.out.println("  "+db.get(taskIndex).toString());
+                UserInterface.printMarkUndone(db, taskIndex);
                 break;
 
             case "todo":
@@ -80,7 +70,7 @@ public class Dawn {
                 }
                 Task todo = new Todo(body);
                 db.add(todo);
-                printTask(todo, db);
+                UserInterface.printTask(todo, db);
                 break;
 
             case "deadline":
@@ -90,7 +80,7 @@ public class Dawn {
                 }
                 Task deadline = new Deadline(deadlineParts[0], deadlineParts[1]); 
                 db.add(deadline);
-                printTask(deadline, db); 
+                UserInterface.printTask(deadline, db); 
                 break;
 
             case "event":
@@ -107,7 +97,7 @@ public class Dawn {
                 String end = dates[1];
                 Task event = new Event(eventDesc, start, end); 
                 db.add(event);
-                printTask(event, db);
+                UserInterface.printTask(event, db);
                 break;
 
             case "delete":
@@ -122,9 +112,7 @@ public class Dawn {
                     throw new InvalidCommandException("  Invalid task number");
                 }
                 Task target = db.remove(taskID);
-                System.out.println("  Noted. I've deleted the following item:");
-                System.out.println("  "+target.toString());
-                System.out.println(String.format("  Now you have %d tasks in the list.", db.size()));
+                UserInterface.printTaskDeleted(db, target);
                 break;
                 
             default:
@@ -137,11 +125,7 @@ public class Dawn {
 
         try { 
             ArrayList<Task> db = Storage.readTasks();
-            
-            System.out.println("""
-            Hello! I'm Dawn!
-            What can I do for you?
-            """);
+            UserInterface.printWelcome();
 
             while (true) {
                 try {
