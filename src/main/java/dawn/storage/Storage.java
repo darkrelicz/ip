@@ -1,5 +1,10 @@
 package dawn.storage;
-import java.io.*;
+import java.io.IOException;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -10,7 +15,6 @@ import dawn.tasks.Todo;
 
 public class Storage {
     public static final String DELIMITER = ",";
-
     private String filePath;
 
     public Storage(String filePath) throws IOException {
@@ -26,7 +30,7 @@ public class Storage {
         }
     }
 
-    public ArrayList<Task> readTasks() throws IOException {
+    public ArrayList<Task> load() throws IOException {
         ArrayList<Task> localDb = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(this.filePath))) {
@@ -61,7 +65,7 @@ public class Storage {
         return localDb;
     }
 
-    public void updateStorage(ArrayList<Task> localDb) throws IOException {
+    public void save(ArrayList<Task> localDb) throws IOException {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(this.filePath))) {
             for (Task t : localDb) {
                 bw.write(t.toCsv() + "\n");

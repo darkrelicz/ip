@@ -25,7 +25,7 @@ public class UserInterface {
 
     public void printTask(Task newTask, ArrayList<Task> db) {
         System.out.println("  Got it. I've added this task:");
-        System.out.println("  "+newTask.toString());    
+        System.out.println("  " + newTask.toString());    
         System.out.println(String.format("  Now you have %d tasks in the list.", db.size()));
     }
 
@@ -55,5 +55,9 @@ public class UserInterface {
 
     public void printExit() {
         System.out.println("  Bye. Hope to see you again soon!"); 
+    }
+
+    public void showError(String msg) {
+        System.out.println("  " + msg);
     }
 }

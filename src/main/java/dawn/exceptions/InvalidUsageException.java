@@ -1,6 +1,6 @@
 package dawn.exceptions;
 
-public class InvalidUsageException extends RuntimeException {
+public class InvalidUsageException extends DawnException {
     public InvalidUsageException(String message) {
         super("  usage: " + message);
     }
