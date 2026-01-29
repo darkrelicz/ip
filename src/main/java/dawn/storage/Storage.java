@@ -9,22 +9,27 @@ import dawn.tasks.Task;
 import dawn.tasks.Todo;
 
 public class Storage {
-    public static final String FILE_PATH = "data/data.csv";
     public static final String DELIMITER = ",";
 
-    private static void createFileIfNotExist() throws IOException {
-        File storage = new File(FILE_PATH);
+    private String filePath;
+
+    public Storage(String filePath) throws IOException {
+        this.filePath = filePath;
+        createFileIfNotExist();
+    }
+
+    private void createFileIfNotExist() throws IOException {
+        File storage = new File(this.filePath);
         if (!storage.exists()) {
             storage.getParentFile().mkdirs();
             storage.createNewFile();
         }
     }
 
-    public static ArrayList<Task> readTasks() throws IOException {
-        createFileIfNotExist();
+    public ArrayList<Task> readTasks() throws IOException {
         ArrayList<Task> localDb = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(this.filePath))) {
             String line;   
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(DELIMITER);
@@ -56,9 +61,8 @@ public class Storage {
         return localDb;
     }
 
-    public static void updateStorage(ArrayList<Task> localDb) throws IOException {
-        createFileIfNotExist();
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
+    public void updateStorage(ArrayList<Task> localDb) throws IOException {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(this.filePath))) {
             for (Task t : localDb) {
                 bw.write(t.toCsv() + "\n");
             }

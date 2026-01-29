@@ -17,9 +17,41 @@ import java.util.Arrays;
 
 public class Dawn {
     private UserInterface ui;
+    private Storage storage;
 
-    public Dawn() {
+    public Dawn(String filePath) {
         this.ui = new UserInterface();
+        try {
+            storage = new Storage(filePath);
+        } catch (IOException e) {
+            System.out.println("  IO issues, please try again!");
+        }
+    }
+
+    public void run() {
+        try { 
+            ArrayList<Task> db = this.storage.readTasks();
+            this.ui.printWelcome();
+
+            while (true) {
+                try {
+                    String input = this.ui.readCommand();
+                    this.handleCommand(input, db);
+                } catch (ExitException e) {
+                    break;
+                } catch (DateTimeParseException e) {
+                    System.out.println("  Please enter dates in this format: dd-MM-yyyy HH:mm");
+                } catch (RuntimeException e) {
+                    System.out.println(e.toString());
+                } catch (IOException e) {
+                    System.out.println("  IO issues");
+                } catch (Exception e) {
+                    System.out.println("  Something went wrong! Please try again.");
+                }            
+            }       
+        } catch (IOException e) {
+            System.out.println("  File not found??!");
+        } 
     }
 
     private void handleCommand(String input, ArrayList<Task> db) 
@@ -30,7 +62,7 @@ public class Dawn {
         switch (cmd) {
             case "exit":
             case "bye":
-                Storage.updateStorage(db);
+                this.storage.updateStorage(db);
                 this.ui.printExit();
                 throw new ExitException();
 
@@ -126,30 +158,6 @@ public class Dawn {
     }
 
     public static void main(String[] args) {
-        Dawn dawnBot = new Dawn();
-
-        try { 
-            ArrayList<Task> db = Storage.readTasks();
-            dawnBot.ui.printWelcome();
-
-            while (true) {
-                try {
-                    String input = dawnBot.ui.readCommand();
-                    dawnBot.handleCommand(input, db);
-                } catch (ExitException e) {
-                    break;
-                } catch (DateTimeParseException e) {
-                    System.out.println("  Please enter dates in this format: dd-MM-yyyy HH:mm");
-                } catch (RuntimeException e) {
-                    System.out.println(e.toString());
-                } catch (IOException e) {
-                    System.out.println("  IO issues");
-                } catch (Exception e) {
-                    System.out.println("  Something went wrong! Please try again.");
-                }            
-            }       
-        } catch (IOException e) {
-            System.out.println("  File not found??!");
-        } 
+        new Dawn("data/data.csv").run();
     }
 }
