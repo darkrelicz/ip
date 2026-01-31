@@ -53,33 +53,33 @@ public class CommandParser {
         String cmd = parts[0].toLowerCase();
         String body = String.join(" ", Arrays.copyOfRange(parts, 1, parts.length));
         switch (cmd) {
-            case "exit":
-            case "bye":
-                return new ExitCommand();
+        case "exit":
+        case "bye":
+            return new ExitCommand();
+        
+        case "list":
+            return new ListCommand();
+
+        case "mark":  
+            return parseMarkCommand(parts);
+
+        case "unmark": 
+            return parseUnmarkCommand(parts);
+
+        case "todo":
+            return new TodoCommand(body);
+
+        case "deadline":
+            return new DeadlineCommand(body);
+
+        case "event":
+            return new EventCommand(body);
+
+        case "delete":
+            return parseDeleteCommand(parts);
             
-            case "list":
-                return new ListCommand();
-
-            case "mark":  
-                return parseMarkCommand(parts);
-
-            case "unmark": 
-                return parseUnmarkCommand(parts);
-
-            case "todo":
-                return new TodoCommand(body);
-
-            case "deadline":
-                return new DeadlineCommand(body);
-
-            case "event":
-                return new EventCommand(body);
-
-            case "delete":
-                return parseDeleteCommand(parts);
-                
-            default:
-                throw new InvalidCommandException("  Unknown command. Please try again!");
+        default:
+            throw new InvalidCommandException("  Unknown command. Please try again!");
         }
     }
 }
