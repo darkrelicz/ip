@@ -7,9 +7,16 @@ import dawn.tasks.Task;
 import dawn.tasks.TaskList;
 import dawn.ui.UserInterface;
 
+/**
+ * Represents the addition of a Event task
+ */
 public class EventCommand extends Command {
     private String body;
 
+    /**
+     * Creates a new command to add a Event task into TaskList
+     * @param body The required information for constituting a Event task
+     */
     public EventCommand(String body) {
         this.body = body;
     }

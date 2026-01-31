@@ -14,7 +14,9 @@ import dawn.commands.DeleteCommand;
 import dawn.commands.EventCommand;
 
 import java.util.Arrays;
-
+/**
+ * Reads and performs the relevant actions depending on the input entered by the user
+ */
 public class CommandParser {
     private Command parseMarkCommand(String[] parts) {
         if (parts.length < 2) {
@@ -40,6 +42,12 @@ public class CommandParser {
         return new DeleteCommand(taskId);
     }
 
+    /**
+     * Return a Command object to be executed depending on the user input
+     * @param input User input or instructions
+     * @return Command to be executed
+     * @throws DawnException If there are issues with the commands' usage
+     */
     public Command parse(String input) throws DawnException {
         String[] parts = input.split(" ");
         String cmd = parts[0].toLowerCase();

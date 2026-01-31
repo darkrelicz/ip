@@ -7,9 +7,16 @@ import dawn.tasks.Task;
 import dawn.tasks.TaskList;
 import dawn.ui.UserInterface;
 
+/**
+ * Represents the addition of a Deadline task
+ */
 public class DeadlineCommand extends Command {
     private String body;
 
+    /**
+     * Creates a new command to add a Deadline task into TaskList
+     * @param body The required information for constituting a Deadline task
+     */
     public DeadlineCommand(String body) {
         this.body = body;
     }

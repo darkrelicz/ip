@@ -5,9 +5,16 @@ import dawn.exceptions.InvalidCommandException;
 import dawn.tasks.TaskList;
 import dawn.ui.UserInterface;
 
+/**
+ * Represents the action to mark the target task as completed
+ */
 public class MarkCommand extends Command {
     private int taskId;
 
+    /**
+     * Creates a command to mark the target task as completed
+     * @param taskId The index of the target task
+     */
     public MarkCommand(int taskId) {
         this.taskId = taskId;
     }

@@ -6,9 +6,16 @@ import dawn.tasks.Task;
 import dawn.tasks.TaskList;
 import dawn.ui.UserInterface;
 
+/**
+ * Represents the action to delete a task
+ */
 public class DeleteCommand extends Command {
     private int taskId;
 
+    /**
+     * Creates a command to delete task from the current list of tasks
+     * @param taskId The index of the target task
+     */
     public DeleteCommand(int taskId) {
         this.taskId = taskId;
     }

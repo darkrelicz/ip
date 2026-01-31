@@ -28,6 +28,10 @@ public class Dawn {
         }
     }
 
+
+    /**
+     * Starts Dawn chatbot
+     */
     public void run() {
         this.ui.printWelcome();
 

@@ -7,9 +7,16 @@ import dawn.tasks.TaskList;
 import dawn.tasks.Todo;
 import dawn.ui.UserInterface;
 
+/**
+ * Represents the addition of a Todo task object
+ */
 public class TodoCommand extends Command {
     private String body;
 
+    /**
+     * Creates a new command to add a Todo task into TaskList
+     * @param body The required information for constituting a Todo task
+     */
     public TodoCommand(String body) {
         this.body = body;
     }
