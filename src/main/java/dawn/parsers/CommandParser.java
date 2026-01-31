@@ -12,6 +12,7 @@ import dawn.commands.TodoCommand;
 import dawn.commands.DeadlineCommand;
 import dawn.commands.DeleteCommand;
 import dawn.commands.EventCommand;
+import dawn.commands.FindCommand;
 
 import java.util.Arrays;
 
@@ -38,6 +39,13 @@ public class CommandParser {
         }
         int taskId = Integer.parseInt(parts[1]) - 1;
         return new DeleteCommand(taskId);
+    }
+
+    private Command parseFindCommand(String[] parts, String body) {
+        if (parts.length < 2) {
+            throw new InvalidUsageException("find <keywords>");
+        }
+        return new FindCommand(body);
     }
 
     public Command parse(String input) throws DawnException {
@@ -69,6 +77,9 @@ public class CommandParser {
 
             case "delete":
                 return parseDeleteCommand(parts);
+
+            case "find":
+                return parseFindCommand(parts, body);
                 
             default:
                 throw new InvalidCommandException("  Unknown command. Please try again!");

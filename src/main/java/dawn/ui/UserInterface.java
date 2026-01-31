@@ -53,6 +53,14 @@ public class UserInterface {
         System.out.println(String.format("  Now you have %d tasks in the list.", db.size()));
     }
 
+    public void printFindTasks(ArrayList<Task> foundTasks) {
+        System.out.println("  Here are the matching tasks in your list:");
+        for (int i = 0; i < foundTasks.size(); i++) {
+            String res = String.format("  %d. %s", i+1, foundTasks.get(i).toString());
+            System.out.println(res);
+        }    
+    }
+
     public void printExit() {
         System.out.println("  Bye. Hope to see you again soon!"); 
     }
