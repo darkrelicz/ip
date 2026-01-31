@@ -9,6 +9,13 @@ public class TaskList {
     private ArrayList<Task> tasks;
 
     /**
+     * Create a new task manager with an empty list;
+     */
+    public TaskList() {
+        this.tasks = new ArrayList<>();
+    }
+
+    /**
      * Creates a list of tasks for the current session
      */
     public TaskList(ArrayList<Task> loadedDb) {
@@ -47,5 +54,20 @@ public class TaskList {
      */
     public Task removeTask(int taskId) {
         return this.tasks.remove(taskId);
+    }
+
+    /**
+     * Returns a list of tasks that contains the specified keyword
+     * @param keyword The target keyword
+     * @return TaskList of target tasks
+     */
+    public TaskList findTasks(String keyword) {
+        TaskList foundTasks = new TaskList();
+        for (Task t : this.tasks) {
+            if (t.getDesc().contains(keyword)) {
+                foundTasks.addTask(t);
+            }
+        }
+        return foundTasks;
     }
 }

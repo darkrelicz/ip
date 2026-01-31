@@ -89,6 +89,18 @@ public class UserInterface {
     }
 
     /**
+     * Display the tasks with matching keywords
+     * @param foundTasks The list of tasks with matching keywords
+     */
+    public void printFindTasks(ArrayList<Task> foundTasks) {
+        System.out.println("  Here are the matching tasks in your list:");
+        for (int i = 0; i < foundTasks.size(); i++) {
+            String res = String.format("  %d. %s", i+1, foundTasks.get(i).toString());
+            System.out.println(res);
+        }    
+    }
+
+    /**
      * Display the exit message
      */
     public void printExit() {
