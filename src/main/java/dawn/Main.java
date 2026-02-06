@@ -1,5 +1,7 @@
 import java.io.IOException;
 
+import dawn.Dawn;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -7,11 +9,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 /**
- * A GUI for Duke using FXML.
+ * A GUI for Dawn using FXML.
  */
 public class Main extends Application {
 
-    private Duke duke = new Duke();
+    //private Duke duke = new Duke();
+    private Dawn dawnBot = new Dawn("data/data.csv");
 
     @Override
     public void start(Stage stage) {
@@ -22,7 +25,7 @@ public class Main extends Application {
             stage.setScene(scene);
             stage.setMinHeight(220);
             stage.setMinWidth(417);
-            fxmlLoader.<MainWindow>getController().setDuke(duke);  // inject the Duke instance
+            fxmlLoader.<MainWindow>getController().setDawn(dawnBot);  // inject the Duke instance
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

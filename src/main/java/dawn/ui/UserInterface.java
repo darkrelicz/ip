@@ -35,83 +35,101 @@ public class UserInterface {
     }
 
     /**
-     * Displays new tasks added 
+     * Returns a message indicating the new task added 
      * @param newTask The new task added, possible task types include Todo, Event, and Deadline
      * @param db The local database responsible for storing tasks for the current session
+     * @return String message indicating the new task added
      */
-    public void printTask(Task newTask, ArrayList<Task> db) {
-        System.out.println("  Got it. I've added this task:");
-        System.out.println("  " + newTask.toString());    
-        System.out.println(String.format("  Now you have %d tasks in the list.", db.size()));
+    public String formatTask(Task newTask, ArrayList<Task> db) {
+        String msg = "";
+        msg += "  Got it. I've added this task:\n";
+        msg += "  " + newTask.toString() + "\n";    
+        msg += String.format("  Now you have %d tasks in the list.", db.size());
+        return msg;
     }
 
     /**
-     * Display all tasks in the current session
+     * Returns a message indicating all tasks in the current session
      * @param db The local database responsible for storing tasks for the current session
+     * @return String message indicating all tasks in the current session
      */
-    public void printList(ArrayList<Task> db) {
-        System.out.println("  Here are the tasks in your list:");
+    public String formatList(ArrayList<Task> db) {
+        String msg;
+        msg += "  Here are the tasks in your list:\n";
         for (int i = 0; i < db.size(); i++) {
-            String res = String.format("  %d. %s", i+1, db.get(i).toString());
-            System.out.println(res);
+            msg += String.format("  %d. %s\n", i+1, db.get(i).toString());
         }     
+        return msg;
     }
 
     /**
-     * Display the task marked as done
+     * Returns a message indicating the task marked as done
      * @param db The local database responsible for storing tasks for the current session
      * @param taskId The index of the task marked as done or completed
+     * @return String message indicating the task marked as done
      */
-    public void printMarkDone(ArrayList<Task> db, int taskId) {
-        System.out.println("  Nice! I've marked this task as done:");
-        System.out.println("  " + db.get(taskId).toString());
+    public String formatMarkDone(ArrayList<Task> db, int taskId) {
+        String msg;
+        msg += "  Nice! I've marked this task as done:\n";
+        msg += "  " + db.get(taskId).toString();
+        return msg;
     }
 
     /**
-     * Display the task marked as undone
+     * Returns a message indicating the task marked as undone
      * @param db The local database responsible for storing tasks for the current session
      * @param taskId The index of the task marked as undone or uncompleted
+     * @return String message indicating the task marked as undone
      */
-    public void printMarkUndone(ArrayList<Task> db, int taskId) {
-        System.out.println("  OK, I've marked this task as not done yet:");
-        System.out.println("  " + db.get(taskId).toString());
+    public String formatMarkUndone(ArrayList<Task> db, int taskId) {
+        String msg;
+        msg += "  OK, I've marked this task as not done yet:\n";
+        msg += "  " + db.get(taskId).toString();
+        return msg;
     }
 
     /**
-     * Display the task deleted
+     * Returns a message indicating the task deleted
      * @param db The local database responsible for storing tasks for the current session
      * @param target The task to be deleted
+     * @return String message indicating the task deleted
      */
-    public void printTaskDeleted(ArrayList<Task> db, Task target) {
-        System.out.println("  Noted. I've deleted the following item:");
-        System.out.println("  " + target.toString());
-        System.out.println(String.format("  Now you have %d tasks in the list.", db.size()));
+    public String formatTaskDeleted(ArrayList<Task> db, Task target) {
+        String msg;
+        msg += "  Noted. I've deleted the following item:\n";
+        msg += "  " + target.toString() + "\n";
+        msg += String.format("  Now you have %d tasks in the list.", db.size());
+        return msg;
     }
 
     /**
-     * Display the tasks with matching keywords
+     * Returns a message indicating the tasks with matching keywords
      * @param foundTasks The list of tasks with matching keywords
+     * @return String message indicating the tasks with matching keywords
      */
-    public void printFindTasks(ArrayList<Task> foundTasks) {
-        System.out.println("  Here are the matching tasks in your list:");
+    public String formatFindTasks(ArrayList<Task> foundTasks) {
+        String msg;
+        msg += "  Here are the matching tasks in your list:\n";
         for (int i = 0; i < foundTasks.size(); i++) {
-            String res = String.format("  %d. %s", i+1, foundTasks.get(i).toString());
-            System.out.println(res);
+            msg += String.format("  %d. %s\n", i+1, foundTasks.get(i).toString());
         }    
+        return msg;
     }
 
     /**
-     * Display the exit message
+     * Returns the exit message
+     * @return String message of the exit message
      */
-    public void printExit() {
-        System.out.println("  Bye. Hope to see you again soon!"); 
+    public String formatExit() {
+        return "  Bye. Hope to see you again soon!"; 
     }
 
     /**
-     * Display error messages
+     * Returns a error message
      * @param msg The error message to be displayed on commandline terminal
+     * @return String message of the error message
      */
-    public void showError(String msg) {
-        System.out.println("  " + msg);
+    public String formatError(String msg) {
+        return "  " + msg;
     }
 }

@@ -28,6 +28,9 @@ public class Dawn {
         }
     }
 
+    public String getResponse(String input) {
+        return "Dawn heard: " + input;
+    }
 
     /**
      * Starts Dawn chatbot
@@ -44,11 +47,11 @@ public class Dawn {
                 saveAndExit();
                 break;
             } catch (DateTimeParseException e) {
-                this.ui.showError("  Please enter dates in this format: dd-MM-yyyy HH:mm");
+                this.ui.formatError("  Please enter dates in this format: dd-MM-yyyy HH:mm");
             } catch (DawnException e) {
-                this.ui.showError(e.toString());
+                this.ui.formatError(e.toString());
             } catch (Exception e) {
-                this.ui.showError("  Something went wrong! Please try again.");
+                this.ui.formatError("  Something went wrong! Please try again.");
             }            
         }       
         
