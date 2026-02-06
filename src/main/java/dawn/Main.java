@@ -1,3 +1,5 @@
+package dawn;
+
 import java.io.IOException;
 
 import dawn.Dawn;

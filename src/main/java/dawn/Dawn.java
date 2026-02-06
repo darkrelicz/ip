@@ -24,48 +24,29 @@ public class Dawn {
             parser = new CommandParser();
             tasks = new TaskList(storage.load());
         } catch (IOException e) {
-            this.ui.showError("  IO issues, please try again!");
+            this.ui.formatError("  IO issues, please try again!");
         }
-    }
-
-    public String getResponse(String input) {
-        return "Dawn heard: " + input;
     }
 
     /**
-     * Starts Dawn chatbot
+     * Process commands received via GUI and return the corresponding output
+     * @param input The command received via GUI
+     * @return String message of the corresponding output
      */
-    public void run() {
-        this.ui.printWelcome();
-
-        while (true) {
-            try {
-                String input = this.ui.readCommand();
-                Command cmd = this.parser.parse(input);
-                cmd.execute(this.tasks, this.ui);
-            } catch (ExitException e) {
-                saveAndExit();
-                break;
-            } catch (DateTimeParseException e) {
-                this.ui.formatError("  Please enter dates in this format: dd-MM-yyyy HH:mm");
-            } catch (DawnException e) {
-                this.ui.formatError(e.toString());
-            } catch (Exception e) {
-                this.ui.formatError("  Something went wrong! Please try again.");
-            }            
-        }       
-        
-    }
-
-    private void saveAndExit() {
+    public String processCommand(String input) throws ExitException {
         try {
-            this.storage.save(this.tasks.getAllTasks());
-        } catch (IOException e) {
-            this.ui.showError("Could not save tasks!");
-        }
+            Command cmd = this.parser.parse(input);
+            return cmd.execute(this.tasks, this.ui, this.storage);
+        } catch (DateTimeParseException e) {
+            return this.ui.formatError("  Please enter dates in this format: dd-MM-yyyy HH:mm");
+        } catch (ExitException e) {
+            throw e;
+        } catch (DawnException e) {
+            return this.ui.formatError(e.toString());
+        }     
     }
 
     public static void main(String[] args) {
-        new Dawn("data/data.csv").run();
+        //new Dawn("data/data.csv").run();
     }
 }

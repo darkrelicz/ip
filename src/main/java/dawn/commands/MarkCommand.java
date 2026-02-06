@@ -1,9 +1,12 @@
 package dawn.commands;
 
+import java.io.IOException;
+
 import dawn.exceptions.DawnException;
 import dawn.exceptions.InvalidCommandException;
 import dawn.tasks.TaskList;
 import dawn.ui.UserInterface;
+import dawn.storage.Storage;
 
 /**
  * Represents the action to mark the target task as completed
@@ -20,7 +23,8 @@ public class MarkCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, UserInterface ui) throws DawnException {
+    public String execute(TaskList tasks, UserInterface ui, Storage db) throws DawnException {
+        String result = "";
         if (tasks.getAllTasks().isEmpty()) {
             throw new InvalidCommandException("  List is empty!");
         }
@@ -29,7 +33,14 @@ public class MarkCommand extends Command {
             throw new InvalidCommandException("  Invalid task number");
         }
         tasks.getTask(this.taskId).markDone();
-        ui.printMarkDone(tasks.getAllTasks(), taskId);
 
+        try {
+            this.saveToStorage(tasks, db);
+            result = ui.formatMarkDone(tasks.getAllTasks(), taskId);
+        } catch (IOException e) {
+            result = "Task not updated to storage!";
+        }
+    
+        return result;
     }
 }

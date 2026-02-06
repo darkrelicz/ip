@@ -1,11 +1,14 @@
 package dawn.commands;
 
+import java.io.IOException;
+
 import dawn.exceptions.DawnException;
 import dawn.exceptions.InvalidUsageException;
 import dawn.tasks.Event;
 import dawn.tasks.Task;
 import dawn.tasks.TaskList;
 import dawn.ui.UserInterface;
+import dawn.storage.Storage;
 
 /**
  * Represents the addition of a Event task
@@ -22,7 +25,8 @@ public class EventCommand extends Command {
     }
 
     @Override 
-    public void execute(TaskList tasks, UserInterface ui) throws DawnException {
+    public String execute(TaskList tasks, UserInterface ui, Storage db) throws DawnException {
+        String result = "";
         String[] eventParts = body.split(" /from ");
         if (eventParts.length < 2) {
             throw new InvalidUsageException("event <task> /from <start date> /to <end date>");
@@ -36,6 +40,14 @@ public class EventCommand extends Command {
         String end = dates[1];
         Task event = new Event(eventDesc, start, end); 
         tasks.addTask(event);
-        ui.printTask(event, tasks.getAllTasks());
+
+        try {
+            this.saveToStorage(tasks, db);
+            result = ui.formatTask(event, tasks.getAllTasks());
+        } catch (IOException e) {
+            result = "Task not saved to storage!";
+        }
+    
+        return result;
     }
 }

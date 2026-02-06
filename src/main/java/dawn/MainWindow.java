@@ -1,3 +1,5 @@
+package dawn;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -7,6 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import dawn.Dawn;
+import dawn.exceptions.ExitException;
 /**
  * Controller for the main GUI.
  */
@@ -30,7 +33,7 @@ public class MainWindow extends AnchorPane {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
-    /** Injects the Duke instance */
+    /** Injects the Dawn instance */
     public void setDawn(Dawn d) {
         dawnBot = d;
     }
@@ -42,13 +45,20 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
-        String response = dawnBot.getResponse(input);
 
-
-        dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
-                DialogBox.getDukeDialog(response, dukeImage)
-        );
+        try {
+            String response = dawnBot.processCommand(input);
+            dialogContainer.getChildren().addAll(
+                    DialogBox.getUserDialog(input, userImage),
+                    DialogBox.getDukeDialog(response, dukeImage)
+            );
+        } catch (ExitException e) {
+            dialogContainer.getChildren().addAll(
+                    DialogBox.getUserDialog(input, userImage),
+                    DialogBox.getDukeDialog("  Bye! Hope to see you soon!", dukeImage)
+            );
+            javafx.application.Platform.exit();
+        }
         userInput.clear();
     }
 }

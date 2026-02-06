@@ -9,21 +9,6 @@ import java.util.Scanner;
  * Encompasses the commandline user interface
  */
 public class UserInterface {
-    private Scanner scanner;
-
-    public UserInterface() {
-        this.scanner = new Scanner(System.in);
-    }
-
-    /**
-     * Reads and return user input from the commandline terminal
-     * 
-     * @return Input from user
-     */
-    public String readCommand() {
-        return this.scanner.nextLine().trim();
-    }
-
     /**
      * Prints welcome message to commandline terminal
      */
@@ -54,7 +39,7 @@ public class UserInterface {
      * @return String message indicating all tasks in the current session
      */
     public String formatList(ArrayList<Task> db) {
-        String msg;
+        String msg = "";
         msg += "  Here are the tasks in your list:\n";
         for (int i = 0; i < db.size(); i++) {
             msg += String.format("  %d. %s\n", i+1, db.get(i).toString());
@@ -69,7 +54,7 @@ public class UserInterface {
      * @return String message indicating the task marked as done
      */
     public String formatMarkDone(ArrayList<Task> db, int taskId) {
-        String msg;
+        String msg = "";
         msg += "  Nice! I've marked this task as done:\n";
         msg += "  " + db.get(taskId).toString();
         return msg;
@@ -82,7 +67,7 @@ public class UserInterface {
      * @return String message indicating the task marked as undone
      */
     public String formatMarkUndone(ArrayList<Task> db, int taskId) {
-        String msg;
+        String msg = "";
         msg += "  OK, I've marked this task as not done yet:\n";
         msg += "  " + db.get(taskId).toString();
         return msg;
@@ -95,7 +80,7 @@ public class UserInterface {
      * @return String message indicating the task deleted
      */
     public String formatTaskDeleted(ArrayList<Task> db, Task target) {
-        String msg;
+        String msg = "";
         msg += "  Noted. I've deleted the following item:\n";
         msg += "  " + target.toString() + "\n";
         msg += String.format("  Now you have %d tasks in the list.", db.size());
@@ -108,20 +93,12 @@ public class UserInterface {
      * @return String message indicating the tasks with matching keywords
      */
     public String formatFindTasks(ArrayList<Task> foundTasks) {
-        String msg;
+        String msg = "";
         msg += "  Here are the matching tasks in your list:\n";
         for (int i = 0; i < foundTasks.size(); i++) {
             msg += String.format("  %d. %s\n", i+1, foundTasks.get(i).toString());
         }    
         return msg;
-    }
-
-    /**
-     * Returns the exit message
-     * @return String message of the exit message
-     */
-    public String formatExit() {
-        return "  Bye. Hope to see you again soon!"; 
     }
 
     /**
