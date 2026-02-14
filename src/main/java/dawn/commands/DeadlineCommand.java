@@ -14,6 +14,9 @@ import dawn.storage.Storage;
  * Represents the addition of a Deadline task
  */
 public class DeadlineCommand extends Command {
+    private static final int TASK_DESCRIPTION_INDEX = 0;
+    private static final int TASK_END_DATE = 1;
+
     private String body;
 
     /**
@@ -31,7 +34,9 @@ public class DeadlineCommand extends Command {
         if (deadlineParts.length < 2) {
             throw new InvalidUsageException("deadline <task> /by <deadline>");
         }
-        Task deadline = new Deadline(deadlineParts[0], deadlineParts[1]); 
+        Task deadline = new Deadline(
+                deadlineParts[TASK_DESCRIPTION_INDEX], 
+                deadlineParts[TASK_END_DATE]); 
         tasks.addTask(deadline);
         
         try {
