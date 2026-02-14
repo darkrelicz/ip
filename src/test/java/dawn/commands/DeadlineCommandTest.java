@@ -2,6 +2,8 @@ package dawn.commands;  //same package as the class being tested
 
 import dawn.exceptions.DawnException;
 import dawn.exceptions.InvalidUsageException;
+import dawn.parsers.CommandParser;
+import dawn.storage.Storage;
 import dawn.tasks.Deadline;
 import dawn.tasks.Task;
 import dawn.tasks.TaskList;
@@ -14,23 +16,30 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class DeadlineCommandTest {
     private TaskList tasks;
     private UserInterface ui;
+    private Storage db;
 
     @BeforeEach
     public void setUp() {
-        tasks = new TaskList(new ArrayList<Task>());
-        ui = new UserInterface();
+        try {
+            db = new Storage("src/test/data/test.csv");
+            tasks = new TaskList(new ArrayList<Task>());
+            ui = new UserInterface();
+        } catch (IOException e) {
+            ui.formatError("  IO issues, please try again!");
+        }
     }
 
     @Test
     public void execute_validDeadline_addsTaskSuccessfully() {
         String body = "submit report /by 10-10-2020 10:00";
         DeadlineCommand cmd = new DeadlineCommand(body);
-        cmd.execute(tasks, ui);
+        cmd.execute(tasks, ui, db);
         assertEquals(1, tasks.getAllTasks().size());
         assertTrue(tasks.getAllTasks().get(0) instanceof Deadline); 
     }
@@ -39,15 +48,15 @@ public class DeadlineCommandTest {
     public void execute_missingDeadline_throwsInvalidUsageException() throws DawnException {
         String body = "submit report";
         DeadlineCommand cmd = new DeadlineCommand(body);
-        assertThrows(InvalidUsageException.class, () -> cmd.execute(tasks, ui)); 
+        assertThrows(InvalidUsageException.class, () -> cmd.execute(tasks, ui, db)); 
     }
 
     @Test
     public void execute_multipleDeadlines_addsAllTasks() throws DawnException {
         DeadlineCommand cmd1 = new DeadlineCommand("task 1 /by 10-10-2020 11:11");
         DeadlineCommand cmd2 = new DeadlineCommand("task 2 /by 20-10-2020 11:11");
-        cmd1.execute(tasks, ui);
-        cmd2.execute(tasks, ui);
+        cmd1.execute(tasks, ui, db);
+        cmd2.execute(tasks, ui, db);
 
         assertEquals(2, tasks.getAllTasks().size());
     }

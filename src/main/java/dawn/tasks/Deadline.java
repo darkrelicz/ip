@@ -40,6 +40,7 @@ public class Deadline extends Task {
      * @throws DateTimeParseException If datetime is not in the correct format
      */
     private LocalDateTime stringToDateTime(String strDate) throws DateTimeParseException {
+        assert !strDate.toString().isEmpty() : "date time should not be empty";
         LocalDateTime dateTime = LocalDateTime.parse(strDate, FORMATTER);
         return dateTime;
     }

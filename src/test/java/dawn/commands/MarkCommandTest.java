@@ -2,6 +2,7 @@ package dawn.commands;  //same package as the class being tested
 
 import dawn.exceptions.DawnException;
 import dawn.exceptions.InvalidCommandException;
+import dawn.storage.Storage;
 import dawn.tasks.Deadline;
 import dawn.tasks.Event;
 import dawn.tasks.Task;
@@ -16,16 +17,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MarkCommandTest {
     private TaskList tasks;
     private UserInterface ui;
+    private Storage db;
 
     @BeforeEach
     public void setUp() {
-        tasks = new TaskList(new ArrayList<Task>());
-        ui = new UserInterface();
+        try {
+            db = new Storage("src/test/data/test.csv");
+            tasks = new TaskList(new ArrayList<Task>());
+            ui = new UserInterface();
+        } catch (IOException e) {
+            ui.formatError("  IO issues, please try again!");
+        }
     }
 
     @Test
@@ -40,9 +48,9 @@ public class MarkCommandTest {
         MarkCommand cmd1 = new MarkCommand(0);
         MarkCommand cmd2 = new MarkCommand(1);
         MarkCommand cmd3 = new MarkCommand(2);
-        cmd1.execute(tasks, ui);
-        cmd2.execute(tasks, ui);
-        cmd3.execute(tasks, ui);
+        cmd1.execute(tasks, ui, db);
+        cmd2.execute(tasks, ui, db);
+        cmd3.execute(tasks, ui, db);
         assertTrue(tasks.getTask(0).getIsDone().equals("1")); 
         assertTrue(tasks.getTask(1).getIsDone().equals("1")); 
         assertTrue(tasks.getTask(2).getIsDone().equals("1")); 
@@ -51,7 +59,7 @@ public class MarkCommandTest {
     @Test
     public void execute_missingTasks_throwsInvalidCommandException() throws DawnException {
         MarkCommand cmd = new MarkCommand(0);
-        assertThrows(InvalidCommandException.class, () -> cmd.execute(tasks, ui)); 
+        assertThrows(InvalidCommandException.class, () -> cmd.execute(tasks, ui, db)); 
     }
 
     @Test
@@ -67,10 +75,10 @@ public class MarkCommandTest {
         MarkCommand cmd2 = new MarkCommand(1);
         MarkCommand cmd3 = new MarkCommand(2);
         MarkCommand cmd4 = new MarkCommand(3);
-        cmd1.execute(tasks, ui);
-        cmd2.execute(tasks, ui);
-        cmd3.execute(tasks, ui);
+        cmd1.execute(tasks, ui, db);
+        cmd2.execute(tasks, ui, db);
+        cmd3.execute(tasks, ui, db);
 
-        assertThrows(InvalidCommandException.class, () -> cmd4.execute(tasks, ui)); 
+        assertThrows(InvalidCommandException.class, () -> cmd4.execute(tasks, ui, db)); 
     }
 }

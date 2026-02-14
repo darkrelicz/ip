@@ -26,6 +26,7 @@ public class UserInterface {
      * @return String message indicating the new task added
      */
     public String formatTask(Task newTask, ArrayList<Task> db) {
+        assert !newTask.toString().isEmpty() : "task should not be empty" ;
         String msg = "";
         msg += "  Got it. I've added this task:\n";
         msg += "  " + newTask.toString() + "\n";    
@@ -54,6 +55,7 @@ public class UserInterface {
      * @return String message indicating the task marked as done
      */
     public String formatMarkDone(ArrayList<Task> db, int taskId) {
+        assert taskId > -1 : "task ID should contain a valid integer";
         String msg = "";
         msg += "  Nice! I've marked this task as done:\n";
         msg += "  " + db.get(taskId).toString();
@@ -67,6 +69,7 @@ public class UserInterface {
      * @return String message indicating the task marked as undone
      */
     public String formatMarkUndone(ArrayList<Task> db, int taskId) {
+        assert taskId > -1 : "task ID should contain a valid integer";
         String msg = "";
         msg += "  OK, I've marked this task as not done yet:\n";
         msg += "  " + db.get(taskId).toString();
@@ -80,6 +83,7 @@ public class UserInterface {
      * @return String message indicating the task deleted
      */
     public String formatTaskDeleted(ArrayList<Task> db, Task target) {
+        assert !target.toString().isEmpty() : "task should not be empty" ;
         String msg = "";
         msg += "  Noted. I've deleted the following item:\n";
         msg += "  " + target.toString() + "\n";
@@ -107,6 +111,7 @@ public class UserInterface {
      * @return String message of the error message
      */
     public String formatError(String msg) {
+        assert !msg.toString().isEmpty() : "error message should not be empty" ;
         return "  " + msg;
     }
 }
