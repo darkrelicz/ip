@@ -26,6 +26,7 @@ public class Storage {
      * @throws IOException If there are issues accessing the database
      */
     public Storage(String filePath) throws IOException {
+        assert !filePath.isEmpty() : "file path should not be empty";
         this.filePath = filePath;
         createFileIfNotExist();
     }
@@ -54,24 +55,28 @@ public class Storage {
             String line;   
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(DELIMITER);
+                assert parts.length >= 2 : "there should be at least 2 elements in parts";
                 String taskType = parts[0];
                 boolean isDone = parts[1].equals("1");
                 String body = String.join(",", Arrays.copyOfRange(parts, 2, parts.length));
                 switch (taskType) {
                     case "T":
                         String[] todoParts = body.split(DELIMITER);
+                        assert todoParts.length >= 1 : "there should be at least 1 element in todoParts";
                         Task newTodo = new Todo(isDone, todoParts[0]);
                         localDb.add(newTodo);
                         break;
                     
                     case "D":
                         String[] deadlineParts = body.split(DELIMITER);
+                        assert deadlineParts.length >= 2 : "there should be at least 2 elements in deadlineParts";
                         Task newDeadline = new Deadline(isDone, deadlineParts[0], deadlineParts[1]);
                         localDb.add(newDeadline);
                         break;
 
                     case "E":
                         String[] eventParts = body.split(DELIMITER);
+                        assert eventParts.length >= 3 : "there should be at least 3 elements in eventParts";
                         Task newEvent = new Event(isDone, eventParts[0], eventParts[1], eventParts[2]);
                         localDb.add(newEvent);
                         break;
@@ -88,6 +93,7 @@ public class Storage {
      * @throws IOException If there are issues accessing the database
      */
     public void save(ArrayList<Task> localDb) throws IOException {
+        assert localDb != null : "localDb should be populated";
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(this.filePath))) {
             for (Task t : localDb) {
                 bw.write(t.toCsv() + "\n");

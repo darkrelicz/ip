@@ -20,6 +20,7 @@ public class Dawn {
     public Dawn(String filePath) {
         this.ui = new UserInterface();
         try {
+            assert (filePath != null && !filePath.isEmpty()) : "filePath should contain a file path string";
             storage = new Storage(filePath);
             parser = new CommandParser();
             tasks = new TaskList(storage.load());
@@ -44,9 +45,5 @@ public class Dawn {
         } catch (DawnException e) {
             return this.ui.formatError(e.toString());
         }     
-    }
-
-    public static void main(String[] args) {
-        //new Dawn("data/data.csv").run();
     }
 }

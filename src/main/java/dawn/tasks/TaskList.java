@@ -36,6 +36,7 @@ public class TaskList {
      * @return Target task object
      */
     public Task getTask(int taskId) {
+        assert taskId > -1 : "task index should be a valid integer";
         return this.tasks.get(taskId);
     }
 
@@ -44,6 +45,7 @@ public class TaskList {
      * @param newTask Task to be added
      */
     public void addTask(Task newTask) {
+        assert newTask != null : "newTask should be populated";
         this.tasks.add(newTask);
     }
 
@@ -53,6 +55,7 @@ public class TaskList {
      * @return Deleted task object
      */
     public Task removeTask(int taskId) {
+        assert taskId > -1 : "task index should be a valid integer";
         return this.tasks.remove(taskId);
     }
 
@@ -62,6 +65,7 @@ public class TaskList {
      * @return TaskList of target tasks
      */
     public TaskList findTasks(String keyword) {
+        assert !keyword.isEmpty() : "keyword should not be empty";
         TaskList foundTasks = new TaskList();
         for (Task t : this.tasks) {
             if (t.getDesc().contains(keyword)) {

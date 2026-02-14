@@ -15,7 +15,6 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-    //private Duke duke = new Duke();
     private Dawn dawnBot = new Dawn("data/data.csv");
 
     @Override
@@ -27,7 +26,7 @@ public class Main extends Application {
             stage.setScene(scene);
             stage.setMinHeight(220);
             stage.setMinWidth(417);
-            fxmlLoader.<MainWindow>getController().setDawn(dawnBot);  // inject the Duke instance
+            fxmlLoader.<MainWindow>getController().setDawn(dawnBot);  // inject the Dawn instance
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
