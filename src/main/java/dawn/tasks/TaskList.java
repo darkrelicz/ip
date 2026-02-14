@@ -67,8 +67,10 @@ public class TaskList {
     public TaskList findTasks(String keyword) {
         assert !keyword.isEmpty() : "keyword should not be empty";
         TaskList foundTasks = new TaskList();
+        String lowerKeyword = keyword.toLowerCase();
+
         for (Task t : this.tasks) {
-            if (t.getDesc().contains(keyword)) {
+            if (t.getDesc().toLowerCase().contains(lowerKeyword)) {
                 foundTasks.addTask(t);
             }
         }
