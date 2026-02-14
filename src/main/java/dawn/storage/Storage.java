@@ -8,6 +8,8 @@ import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import dawn.exceptions.DawnException;
+import dawn.exceptions.InvalidCommandException;
 import dawn.tasks.Deadline;
 import dawn.tasks.Event;
 import dawn.tasks.Task;
@@ -17,7 +19,17 @@ import dawn.tasks.Todo;
  * Represents the interface to store the current session memory onto a database
  */
 public class Storage {
+    private static final int TASK_TYPE_INDEX = 0;
+    private static final int IS_DONE_INDEX = 1;
+    private static final int TASK_DESCRIPTION_INDEX = 0;
+    private static final int TASK_START_DATE = 1;
+    private static final int TASK_END_DATE = 2;
+    private static final String TASK_TYPE_TODO = "T";
+    private static final String TASK_TYPE_DEADLINE = "D";
+    private static final String TASK_TYPE_EVENT = "E";
+
     public static final String DELIMITER = ",";
+
     private String filePath;
 
     /**
@@ -43,47 +55,85 @@ public class Storage {
         }
     }
 
+    private Task createTodo(boolean isDone, String body) {
+        String[] todoParts = body.split(DELIMITER);
+        Task newTodo = new Todo(isDone, todoParts[TASK_DESCRIPTION_INDEX]);
+        return newTodo;
+    }
+
+    private Task createDeadline(boolean isDone, String body) {
+        String[] deadlineParts = body.split(DELIMITER);
+        Task newDeadline = new Deadline(
+                isDone, 
+                deadlineParts[TASK_DESCRIPTION_INDEX], 
+                deadlineParts[TASK_START_DATE]);
+        return newDeadline;
+    }
+
+    private Task createEvent(boolean isDone, String body) {
+        String[] eventParts = body.split(DELIMITER);
+        Task newEvent = new Event(
+                isDone, 
+                eventParts[TASK_DESCRIPTION_INDEX], 
+                eventParts[TASK_START_DATE], 
+                eventParts[TASK_END_DATE]);
+        return newEvent;
+    }
+
+    private Task createTask(String taskType, boolean isDone, String body) throws DawnException {
+        Task newTask;
+        switch (taskType) {
+        case TASK_TYPE_TODO:
+            newTask = createTodo(isDone, body);
+            break;
+        
+        case TASK_TYPE_DEADLINE:
+            newTask = createDeadline(isDone, body);
+            break;
+
+        case TASK_TYPE_EVENT:
+            newTask = createEvent(isDone, body);
+            break;
+
+        default:
+            throw new InvalidCommandException("Unknown task type: " + taskType);
+        }
+        
+        return newTask;
+    }
+
+    private String extractTaskType(String[] parts) {
+        return parts[TASK_TYPE_INDEX];
+    }
+
+    private boolean extractDoneStatus(String[] parts) {
+        return parts[IS_DONE_INDEX].equals("1");
+    }
+
+    private Task parseLine(String line) {
+        String[] parts = line.split(DELIMITER);
+        String taskType = extractTaskType(parts);
+        boolean isDone = extractDoneStatus(parts);
+        String body = String.join(",", Arrays.copyOfRange(parts, 2, parts.length));
+        Task newTask = createTask(taskType, isDone, body);
+        return newTask;
+    }
+
     /**
      * Creates a local copy of the database
      * @return A list of Task objects populated with information from the database
      * @throws IOException If there are issues accessing the database
      */
-    public ArrayList<Task> load() throws IOException {
+    public ArrayList<Task> load() throws IOException, DawnException {
         ArrayList<Task> localDb = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(this.filePath))) {
             String line;   
             while ((line = br.readLine()) != null) {
-                String[] parts = line.split(DELIMITER);
-                assert parts.length >= 2 : "there should be at least 2 elements in parts";
-                String taskType = parts[0];
-                boolean isDone = parts[1].equals("1");
-                String body = String.join(",", Arrays.copyOfRange(parts, 2, parts.length));
-                switch (taskType) {
-                    case "T":
-                        String[] todoParts = body.split(DELIMITER);
-                        assert todoParts.length >= 1 : "there should be at least 1 element in todoParts";
-                        Task newTodo = new Todo(isDone, todoParts[0]);
-                        localDb.add(newTodo);
-                        break;
-                    
-                    case "D":
-                        String[] deadlineParts = body.split(DELIMITER);
-                        assert deadlineParts.length >= 2 : "there should be at least 2 elements in deadlineParts";
-                        Task newDeadline = new Deadline(isDone, deadlineParts[0], deadlineParts[1]);
-                        localDb.add(newDeadline);
-                        break;
-
-                    case "E":
-                        String[] eventParts = body.split(DELIMITER);
-                        assert eventParts.length >= 3 : "there should be at least 3 elements in eventParts";
-                        Task newEvent = new Event(isDone, eventParts[0], eventParts[1], eventParts[2]);
-                        localDb.add(newEvent);
-                        break;
-                }
+                Task newTask = parseLine(line);
+                localDb.add(newTask);
             }
         } 
-
         return localDb;
     }
 

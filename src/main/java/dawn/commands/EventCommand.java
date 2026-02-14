@@ -14,6 +14,12 @@ import dawn.storage.Storage;
  * Represents the addition of a Event task
  */
 public class EventCommand extends Command {
+    private static final int TASK_DESCRIPTION_INDEX = 0;
+    private static final int TASK_BODY_INDEX = 1;
+    private static final int TASK_START_DATE_INDEX = 0;
+    private static final int TASK_END_DATE_INDEX = 1;
+
+
     private String body;
 
     /**
@@ -31,13 +37,13 @@ public class EventCommand extends Command {
         if (eventParts.length < 2) {
             throw new InvalidUsageException("event <task> /from <start date> /to <end date>");
         }
-        String eventDesc = eventParts[0];
-        String[] dates = eventParts[1].split(" /to ");
+        String eventDesc = eventParts[TASK_DESCRIPTION_INDEX];
+        String[] dates = eventParts[TASK_BODY_INDEX].split(" /to ");
         if (dates.length < 2) {
             throw new InvalidUsageException("event <task> /from <start date> /to <end date>");
         }
-        String start = dates[0];
-        String end = dates[1];
+        String start = dates[TASK_START_DATE_INDEX];
+        String end = dates[TASK_END_DATE_INDEX];
         Task event = new Event(eventDesc, start, end); 
         tasks.addTask(event);
 
