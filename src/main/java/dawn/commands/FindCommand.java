@@ -38,6 +38,7 @@ public class FindCommand extends Command {
             String[] parts = keyword.split("/type");
             taskType = extractTaskType(parts[1]);
             searchKeyword = extractKeyword(parts[1], taskType);
+            
         }
 
         foundTasks = tasks.findTasks(searchKeyword, taskType);

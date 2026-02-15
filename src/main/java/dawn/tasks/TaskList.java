@@ -62,11 +62,10 @@ public class TaskList {
     /**
      * Returns a list of tasks that contains the specified keyword and is of correct task type
      * @param keyword The target keyword
-     * @param taskType The target task type
+     * @param taskType The target task ty
      * @return TaskList of target tasks
      */
     public TaskList findTasks(String keyword, String taskType) {
-        assert !keyword.isEmpty() : "keyword should not be empty";
         TaskList foundTasks = new TaskList();
         String lowerKeyword = keyword.toLowerCase();
 
@@ -76,9 +75,11 @@ public class TaskList {
                     (taskType.equals("DEADLINE") && t instanceof Deadline) ||
                     (taskType.equals("EVENT") && t instanceof Event);
 
-            if (typeMatches && t.getDesc().toLowerCase().contains(lowerKeyword)) {
+            if (typeMatches && 
+                    (t.getDesc().toLowerCase().contains(lowerKeyword) || 
+                    lowerKeyword.isBlank())) {
                 foundTasks.addTask(t);
-            }
+            } 
         }
         return foundTasks;
     }
