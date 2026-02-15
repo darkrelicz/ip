@@ -45,7 +45,7 @@ public class CommandParser {
 
     private Command parseFindCommand(String[] parts, String body) {
         if (parts.length < 2) {
-            throw new InvalidUsageException("find <keywords>");
+            throw new InvalidUsageException("find [/type <task type>] <keywords>");
         }
         return new FindCommand(body);
     }

@@ -15,15 +15,32 @@ public class FindCommand extends Command {
         this.keyword = body;
     }   
 
+    private String extractTaskType(String body) {
+        return body.trim().toUpperCase().split("\\s+")[0];
+    }
+
+    private String extractKeyword(String body, String taskType) {
+        return body.trim().substring(taskType.length()).trim();
+    }
+
     @Override
     public String execute(TaskList tasks, UserInterface ui, Storage db) throws DawnException {
+        String taskType = "ALL";
+        String searchKeyword = keyword;
+
         TaskList foundTasks = new TaskList();
 
         if (tasks.getAllTasks().isEmpty()) {
             throw new InvalidCommandException("  List is empty!");
         }
 
-        foundTasks = tasks.findTasks(keyword);
+        if (keyword.contains("/type")) {
+            String[] parts = keyword.split("/type");
+            taskType = extractTaskType(parts[1]);
+            searchKeyword = extractKeyword(parts[1], taskType);
+        }
+
+        foundTasks = tasks.findTasks(searchKeyword, taskType);
         return ui.formatFindTasks(foundTasks.getAllTasks());
     }
 }
