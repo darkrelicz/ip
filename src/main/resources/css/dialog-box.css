@@ -1,0 +1,32 @@
+.label {
+    -fx-background-color: #ddffd6;
+    -fx-border-color: #aaaaaa;
+    -fx-border-width: 2px;
+    -fx-background-radius: 1em 1em 0 1em;
+    -fx-border-radius: 1em 1em 0 1em;
+    -fx-padding: 6px;
+    -fx-border-insets: 0px 7px 0px 7px;
+    -fx-background-insets: 0px 7px 0px 7px;
+}
+
+.reply-label {
+    -fx-background-radius: 1em 1em 1em 0;
+    -fx-border-radius: 1em 1em 1em 0;
+}
+
+/* Dynamic command styling */
+.add-label {
+    -fx-background-color: linear-gradient(to bottom right, #fffacd, #ffe066);
+}
+
+.marked-label {
+    -fx-background-color: linear-gradient(to bottom right, #90ee90, #57c457);
+}
+
+.delete-label {
+    -fx-background-color: linear-gradient(to bottom right, #ffb6c1, #ff8fa0);
+}
+
+#displayPicture {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 5, 5);
+}

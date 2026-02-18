@@ -48,14 +48,15 @@ public class MainWindow extends AnchorPane {
 
         try {
             String response = dawnBot.processCommand(input);
+            String commandType = dawnBot.getCommandType();
             dialogContainer.getChildren().addAll(
                     DialogBox.getUserDialog(input, userImage),
-                    DialogBox.getDukeDialog(response, dukeImage)
+                    DialogBox.getDukeDialog(response, dukeImage, commandType)
             );
         } catch (ExitException e) {
             dialogContainer.getChildren().addAll(
                     DialogBox.getUserDialog(input, userImage),
-                    DialogBox.getDukeDialog("  Bye! Hope to see you soon!", dukeImage)
+                    DialogBox.getDukeDialog("  Bye! Hope to see you soon!", dukeImage, "ExitCommand")
             );
             javafx.application.Platform.exit();
         }

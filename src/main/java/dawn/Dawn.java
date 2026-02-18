@@ -16,6 +16,7 @@ public class Dawn {
     private UserInterface ui;
     private Storage storage;
     private TaskList tasks;
+    private String commandType;
 
     public Dawn(String filePath) throws IOException {
         this.ui = new UserInterface();
@@ -33,13 +34,24 @@ public class Dawn {
     public String processCommand(String input) throws ExitException {
         try {
             Command cmd = this.parser.parse(input);
+            commandType = cmd.getClass().getSimpleName();
             return cmd.execute(this.tasks, this.ui, this.storage);
         } catch (DateTimeParseException e) {
+            commandType = "Error";
             return this.ui.formatError("  Please enter dates in this format: dd-MM-yyyy HH:mm");
         } catch (ExitException e) {
             throw e;
         } catch (DawnException e) {
+            commandType = "Error";
             return this.ui.formatError(e.toString());
         }     
+    }
+
+    /**
+     * Returns the command type of the last processed command
+     * @return The simple class name of the last command
+     */
+    public String getCommandType() {
+        return commandType;
     }
 }
