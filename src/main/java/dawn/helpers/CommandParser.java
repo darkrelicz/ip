@@ -1,4 +1,4 @@
-package dawn.parsers;
+package dawn.helpers;
 
 import dawn.exceptions.DawnException;
 import dawn.exceptions.InvalidCommandException;
@@ -15,6 +15,7 @@ import dawn.commands.EventCommand;
 import dawn.commands.FindCommand;
 
 import java.util.Arrays;
+
 /**
  * Reads and performs the relevant actions depending on the input entered by the user
  */

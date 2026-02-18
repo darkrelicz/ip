@@ -110,7 +110,7 @@ public class Storage {
         return parts[IS_DONE_INDEX].equals("1");
     }
 
-    private Task parseLine(String line) {
+    private Task parseLine(String line) throws DawnException {
         String[] parts = line.split(DELIMITER);
         String taskType = extractTaskType(parts);
         boolean isDone = extractDoneStatus(parts);

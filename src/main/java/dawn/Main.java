@@ -14,12 +14,19 @@ import javafx.stage.Stage;
  * A GUI for Dawn using FXML.
  */
 public class Main extends Application {
-
-    private Dawn dawnBot = new Dawn("data/data.csv");
-
     @Override
     public void start(Stage stage) {
         try {
+            /*
+            AI USAGE
+            AI warned the possiblility of a null object being returned if
+            IOException was thrown during the initialization of a Dawn 
+            object. 
+            
+            Shifted the initialization of Dawn object into the try-catch
+            below to prevent using an invalid instance due to IOExceptions
+            */ 
+            Dawn dawnBot = new Dawn("data/data.csv");
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);

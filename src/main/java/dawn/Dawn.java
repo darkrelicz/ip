@@ -1,9 +1,9 @@
 package dawn;
 
 import dawn.commands.Command;
-import dawn.parsers.CommandParser;
 import dawn.exceptions.DawnException;
 import dawn.exceptions.ExitException;
+import dawn.helpers.CommandParser;
 import dawn.storage.Storage;
 import dawn.tasks.TaskList;
 import dawn.ui.UserInterface;
@@ -17,16 +17,12 @@ public class Dawn {
     private Storage storage;
     private TaskList tasks;
 
-    public Dawn(String filePath) {
+    public Dawn(String filePath) throws IOException {
         this.ui = new UserInterface();
-        try {
-            assert (filePath != null && !filePath.isEmpty()) : "filePath should contain a file path string";
-            storage = new Storage(filePath);
-            parser = new CommandParser();
-            tasks = new TaskList(storage.load());
-        } catch (IOException e) {
-            this.ui.formatError("  IO issues, please try again!");
-        }
+        assert (filePath != null && !filePath.isEmpty()) : "filePath should contain a file path string";
+        storage = new Storage(filePath);
+        parser = new CommandParser();
+        tasks = new TaskList(storage.load());
     }
 
     /**

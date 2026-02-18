@@ -70,10 +70,13 @@ public class TaskList {
         String lowerKeyword = keyword.toLowerCase();
 
         for (Task t : this.tasks) {
+            /*
+            AI USAGE
+            AI recommended to implement a getTaskType() to simplify validating for
+            type matches. Originally, instanceof was used
+            */
             boolean typeMatches = taskType.equals("ALL") ||
-                    (taskType.equals("TODO") && t instanceof Todo) ||
-                    (taskType.equals("DEADLINE") && t instanceof Deadline) ||
-                    (taskType.equals("EVENT") && t instanceof Event);
+                    (taskType.equals(t.getTaskType()));
 
             if (typeMatches && 
                     (t.getDesc().toLowerCase().contains(lowerKeyword) || 

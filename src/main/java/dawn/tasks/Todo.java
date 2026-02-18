@@ -21,6 +21,11 @@ public class Todo extends Task {
         super(isDone, description);
     }
 
+    @Override
+    public String getTaskType() {
+        return "TODO";
+    }
+
     @Override 
     public String toCsv() {
         return "T," + super.toCsv();

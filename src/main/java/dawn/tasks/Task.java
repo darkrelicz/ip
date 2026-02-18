@@ -3,7 +3,7 @@ package dawn.tasks;
 /**
  * Represents the task to be completed 
  */
-public class Task {
+public abstract class Task {
     protected String description;
     protected boolean isDone;
 
@@ -63,6 +63,12 @@ public class Task {
     public void unmarkDone() {
         this.isDone = false;
     }
+
+    /**
+     * Returns the task type of current class
+     * @return Task type
+     */
+    public abstract String getTaskType(); 
 
     /**
      * Return the task information in a Comma Separated format for storage
