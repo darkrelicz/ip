@@ -20,20 +20,28 @@ import java.util.Arrays;
  * Reads and performs the relevant actions depending on the input entered by the user
  */
 public class CommandParser {
-    private Command parseMarkCommand(String[] parts) {
+    private Command parseMarkCommand(String[] parts) throws DawnException {
         if (parts.length < 2) {
             throw new InvalidUsageException("mark <task number>");
         }
-        int taskId = Integer.parseInt(parts[1]) - 1;
-        return new MarkCommand(taskId);
+        try {
+            int taskId = Integer.parseInt(parts[1]) - 1;
+            return new MarkCommand(taskId);
+        } catch (NumberFormatException e) {
+            throw new InvalidCommandException("Please enter a valid task number");
+        }
     }
 
     private Command parseUnmarkCommand(String[] parts) {
         if (parts.length < 2) {
             throw new InvalidUsageException("unmark <task number>");
         }
-        int taskId = Integer.parseInt(parts[1]) - 1;
-        return new UnmarkCommand(taskId);
+        try {
+            int taskId = Integer.parseInt(parts[1]) - 1;
+            return new UnmarkCommand(taskId);
+        } catch (NumberFormatException e) {
+            throw new InvalidCommandException("Please enter a valid task number");
+        }
     }
 
     private Command parseDeleteCommand(String[] parts) {

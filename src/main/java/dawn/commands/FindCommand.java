@@ -2,6 +2,7 @@ package dawn.commands;
 
 import dawn.exceptions.DawnException;
 import dawn.exceptions.InvalidCommandException;
+import dawn.exceptions.InvalidUsageException;
 import dawn.tasks.TaskList;
 import dawn.ui.UserInterface;
 import dawn.storage.Storage;
@@ -15,8 +16,19 @@ public class FindCommand extends Command {
         this.keyword = body;
     }   
 
-    private String extractTaskType(String body) {
-        return body.trim().toUpperCase().split("\\s+")[0];
+    private String extractTaskType(String body) throws DawnException {
+        if (body.isBlank()) {
+            throw new InvalidUsageException("find [/type <task type>] <keywords>");
+        }
+
+        String result = body.trim().toUpperCase().split("\\s+")[0];
+
+        if (!result.equals("TODO") &&
+                !result.equals("EVENT") &&
+                !result.equals("DEADLINE")) {
+            throw new InvalidCommandException("Valid task types are todo, event and deadline");
+        } 
+        return result;
     }
 
     private String extractKeyword(String body, String taskType) {
@@ -35,7 +47,10 @@ public class FindCommand extends Command {
         }
 
         if (keyword.contains("/type")) {
-            String[] parts = keyword.split("/type");
+            String[] parts = keyword.split("/type", 2);
+            if (parts.length < 2 || parts[1].isBlank()) {
+                throw new InvalidUsageException("find [/type <task type>] <keywords>");
+            }
             taskType = extractTaskType(parts[1]);
             searchKeyword = extractKeyword(parts[1], taskType);
             
