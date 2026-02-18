@@ -20,49 +20,65 @@ Dawn is a *task-focused* chatbot that helps you track to-dos, deadlines and even
 ## Add a to-do task: `todo`
 
 Adds a task with no date and time. 
+
 Format: `todo DESCRIPTION`
+
 Example: `todo read book`
 
 ## Add a deadlline task: `deadline`
 
-Adds a task that specifies the due datre
+Adds a task that specifies the due date
+
 Format: `deadline DESCRIPTION /by dd-MM-yyyy HH:mm`
+
 Example: `deadline buy groceries /by 10-10-2026 17:00`
 
 ## Add an event: `event`
 
 Adds a task that spans a time range
+
 Format: `event DESCRIPTION /from dd-MM-yyyy HH:mm /to dd-MM-yyyy HH:mm`
+
 Example: `event cny celebrations /from 17-02-2026 00:00 /to 19-02-2026 23:59`
 
 ## List tasks: `list`
 
 Shows all tasks, regardless of completion status
+
 Format: `list`
 
 ## Mark tasks as done: `mark`
 
 Mark a task as completed.
+
 Format: `mark TASK_INDEX`
+
 Example: `mark 1`
 
 # Mark tasks as not done: `unmark`
 
 Mark a task as not completed.
+
 Format: `unmark TASK_INDEX`
+
 Example: `unmark 1`
 
 ## Delete tasks: `delete`
 
 Delete a task.
+
 Format: `delete TASK_INDEX`
+
 Example: `delete 1`
 
 ## Find task by keyword: `find`
 
 Find tasks whose descriptions contain the keyword (case-insensitive). 
+
 Optionally, find tasks whose task type matches the given task type.
+
 Format: `find [/type TASK_TYPE] KEYWORD`, where those enclosed in square brackets `[]` are optional input
+
 Examples:
 ```
 find report
@@ -73,6 +89,7 @@ find /type deadline report
 ## Exit the app: `bye`, `exit`
 
 Closes Dawn chatbot.
+
 Format: `bye`, `exit`
 
 # Data Storage
